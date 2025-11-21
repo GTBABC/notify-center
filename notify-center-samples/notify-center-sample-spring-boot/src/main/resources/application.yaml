@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+notify:
+  rules:
+    order.timeout:
+      level: ALERT
+      channels:
+        - channel: DING_TALK
+          templateId: tpl_order_timeout_dingtalk
+
+  templates:
+    tpl_order_timeout_dingtalk:
+      channel: DING_TALK
+      format: MARKDOWN
+      title: "????????${orderId}"
+      content: |
+        ?? ${orderId} ??? ${timeoutMinutes} ??
+        ???${userId}
