@@ -1,8 +1,8 @@
 package com.gtbabc.notifycenter.provider;
 
+import com.gtbabc.notifycenter.config.template.NotifyTemplateProperties;
 import com.gtbabc.notifycenter.core.model.NotifyTemplate;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
-import com.gtbabc.notifycenter.config.NotifyTemplateProperties;
 
 public class YamlNotifyTemplateProvider implements NotifyTemplateProvider {
 
