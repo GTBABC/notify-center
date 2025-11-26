@@ -1,6 +1,6 @@
 package com.gtbabc.notifycenter.core.provider;
 
-import com.gtbabc.notifycenter.core.model.NotifyTemplate;
+import com.gtbabc.notifycenter.core.constant.NotifyTemplate;
 
 public interface NotifyTemplateProvider {
 

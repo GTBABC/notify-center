@@ -1,4 +1,4 @@
-package com.gtbabc.notifycenter.core.model;
+package com.gtbabc.notifycenter.core.constant;
 
 /**
  * 通知渠道类型枚举

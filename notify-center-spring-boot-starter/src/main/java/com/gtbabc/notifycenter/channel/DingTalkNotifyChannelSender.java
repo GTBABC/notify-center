@@ -1,8 +1,8 @@
 package com.gtbabc.notifycenter.channel;
 
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
-import com.gtbabc.notifycenter.core.model.NotifyChannelType;
-import com.gtbabc.notifycenter.core.model.NotifyMessage;
+import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
+import com.gtbabc.notifycenter.core.constant.NotifyMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

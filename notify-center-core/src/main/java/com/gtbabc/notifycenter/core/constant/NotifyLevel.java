@@ -1,4 +1,4 @@
-package com.gtbabc.notifycenter.core.model;
+package com.gtbabc.notifycenter.core.constant;
 
 /**
  * 通知等级枚举

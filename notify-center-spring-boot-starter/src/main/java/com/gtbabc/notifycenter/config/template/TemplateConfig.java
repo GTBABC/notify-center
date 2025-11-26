@@ -1,7 +1,7 @@
 package com.gtbabc.notifycenter.config.template;
 
-import com.gtbabc.notifycenter.core.model.NotifyChannelType;
-import com.gtbabc.notifycenter.core.model.TemplateFormat;
+import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
+import com.gtbabc.notifycenter.core.constant.TemplateFormat;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
 package com.gtbabc.notifycenter.core.channel;
 
-import com.gtbabc.notifycenter.core.model.NotifyChannelType;
-import com.gtbabc.notifycenter.core.model.NotifyMessage;
+import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
+import com.gtbabc.notifycenter.core.constant.NotifyMessage;
 
 public interface NotifyChannelSender {
 

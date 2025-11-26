@@ -1,7 +1,8 @@
 package com.gtbabc.notifycenter.provider;
 
 import com.gtbabc.notifycenter.config.template.NotifyTemplateProperties;
-import com.gtbabc.notifycenter.core.model.NotifyTemplate;
+import com.gtbabc.notifycenter.config.template.TemplateConfig;
+import com.gtbabc.notifycenter.core.constant.NotifyTemplate;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
 
 public class YamlNotifyTemplateProvider implements NotifyTemplateProvider {
@@ -17,7 +18,7 @@ public class YamlNotifyTemplateProvider implements NotifyTemplateProvider {
         if (templateId == null) {
             return null;
         }
-        NotifyTemplateProperties.TemplateConfig cfg = properties.getTemplates().get(templateId);
+        TemplateConfig cfg = properties.getTemplates().get(templateId);
         if (cfg == null) {
             return null;
         }

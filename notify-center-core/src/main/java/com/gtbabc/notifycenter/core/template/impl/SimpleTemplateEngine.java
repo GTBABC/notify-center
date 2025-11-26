@@ -1,4 +1,6 @@
-package com.gtbabc.notifycenter.core.template;
+package com.gtbabc.notifycenter.core.template.impl;
+
+import com.gtbabc.notifycenter.core.template.TemplateEngine;
 
 import java.util.Map;
 

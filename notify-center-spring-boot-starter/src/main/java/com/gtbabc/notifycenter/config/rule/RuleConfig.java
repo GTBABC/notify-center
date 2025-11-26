@@ -1,6 +1,6 @@
 package com.gtbabc.notifycenter.config.rule;
 
-import com.gtbabc.notifycenter.core.model.NotifyLevel;
+import com.gtbabc.notifycenter.core.constant.NotifyLevel;
 import lombok.Data;
 
 import java.util.List;

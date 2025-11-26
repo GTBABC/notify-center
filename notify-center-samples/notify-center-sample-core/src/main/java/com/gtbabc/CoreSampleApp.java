@@ -2,17 +2,17 @@ package com.gtbabc;
 
 import com.gtbabc.notifycenter.core.api.NotifyClient;
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
-import com.gtbabc.notifycenter.core.model.ChannelRule;
-import com.gtbabc.notifycenter.core.model.NotifyChannelType;
-import com.gtbabc.notifycenter.core.model.NotifyLevel;
-import com.gtbabc.notifycenter.core.model.NotifyMessage;
-import com.gtbabc.notifycenter.core.model.NotifyRule;
-import com.gtbabc.notifycenter.core.model.NotifyTemplate;
-import com.gtbabc.notifycenter.core.model.TemplateFormat;
+import com.gtbabc.notifycenter.core.constant.ChannelRule;
+import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
+import com.gtbabc.notifycenter.core.constant.NotifyLevel;
+import com.gtbabc.notifycenter.core.constant.NotifyMessage;
+import com.gtbabc.notifycenter.core.constant.NotifyRule;
+import com.gtbabc.notifycenter.core.constant.NotifyTemplate;
+import com.gtbabc.notifycenter.core.constant.TemplateFormat;
 import com.gtbabc.notifycenter.core.provider.NotifyRuleProvider;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
-import com.gtbabc.notifycenter.core.service.DefaultNotifyClient;
-import com.gtbabc.notifycenter.core.template.SimpleTemplateEngine;
+import com.gtbabc.notifycenter.core.api.impl.DefaultNotifyClient;
+import com.gtbabc.notifycenter.core.template.impl.SimpleTemplateEngine;
 import com.gtbabc.notifycenter.core.template.TemplateEngine;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class CoreSampleApp {
         // 3. 调用 notify
         notifyClient.notify("order.timeout", Map.of(
                 "orderId", 12345,
-                "userId",  67890,
+                "userId", 67890,
                 "timeoutMinutes", 30
         ));
     }

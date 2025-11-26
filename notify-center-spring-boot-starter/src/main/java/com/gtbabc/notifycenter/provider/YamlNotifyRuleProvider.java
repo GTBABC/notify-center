@@ -1,8 +1,8 @@
 package com.gtbabc.notifycenter.provider;
 
 import com.gtbabc.notifycenter.config.rule.NotifyRuleProperties;
-import com.gtbabc.notifycenter.core.model.ChannelRule;
-import com.gtbabc.notifycenter.core.model.NotifyRule;
+import com.gtbabc.notifycenter.core.constant.ChannelRule;
+import com.gtbabc.notifycenter.core.constant.NotifyRule;
 import com.gtbabc.notifycenter.core.provider.NotifyRuleProvider;
 
 import java.util.ArrayList;

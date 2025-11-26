@@ -1,6 +1,6 @@
 package com.gtbabc.notifycenter.core.provider;
 
-import com.gtbabc.notifycenter.core.model.NotifyRule;
+import com.gtbabc.notifycenter.core.constant.NotifyRule;
 
 public interface NotifyRuleProvider {
 
