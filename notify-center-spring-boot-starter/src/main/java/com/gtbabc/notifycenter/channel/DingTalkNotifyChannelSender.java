@@ -1,18 +1,23 @@
 package com.gtbabc.notifycenter.channel;
 
+import com.gtbabc.notifycenter.channel.config.DingTalkNotifyProperties;
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
 import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
 import com.gtbabc.notifycenter.core.constant.NotifyMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
-/**
- * 钉钉 Sender 占位实现：先把要发的内容打日志。
- * 之后你可以在这里用 RestTemplate 调 webhook。
- */
+import java.util.Objects;
+
 public class DingTalkNotifyChannelSender implements NotifyChannelSender {
 
-    private static final Logger log = LoggerFactory.getLogger(DingTalkNotifyChannelSender.class);
+    private final DingTalkNotifyProperties properties;
+
+    private final RestTemplate restTemplate;
+
+    public DingTalkNotifyChannelSender(DingTalkNotifyProperties properties, RestTemplate restTemplate) {
+        this.properties = Objects.requireNonNull(properties, "properties must not be null");
+        this.restTemplate = Objects.requireNonNull(restTemplate, "restTemplate must not be null");
+    }
 
     @Override
     public NotifyChannelType getChannelType() {
@@ -21,8 +26,6 @@ public class DingTalkNotifyChannelSender implements NotifyChannelSender {
 
     @Override
     public void send(NotifyMessage message) {
-        // TODO: 这里换成真正的钉钉机器人调用
-        log.info("[DING_TALK] notifyKey={}, title={}, content={}",
-                message.getNotifyKey(), message.getTitle(), message.getContent());
+        // Implement the logic to send a message via DingTalk Webhook
     }
 }

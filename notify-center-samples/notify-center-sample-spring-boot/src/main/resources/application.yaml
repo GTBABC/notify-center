@@ -1,19 +1,31 @@
 server:
   port: 8080
 
-notify:
-  rules:
-    order.timeout:
-      level: ALERT
-      channels:
-        - channel: DING_TALK
-          templateId: tpl_order_timeout_dingtalk
+spring:
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: your_username
+    password: your_password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
-  templates:
-    tpl_order_timeout_dingtalk:
-      channel: DING_TALK
-      format: MARKDOWN
-      title: "????????${orderId}"
-      content: |
-        ?? ${orderId} ??? ${timeoutMinutes} ??
-        ???${userId}
+
+notify:
+  feishu:
+    enabled: true
+    webhook-url: https://open.feishu.cn/open-apis/bot/v2/hook/84df1d3c-d2d6-4bf1-ab49-c6d9f82014d4
+
+  dingding:
+    enabled: true
+    webhook-url: https://oapi.dingtalk.com/robot/send?access_token=你的token
+
+  mail:
+    enabled: true
+    from: no-reply@example.com
+    to:
+      - dev-team@example.com

@@ -1,0 +1,22 @@
+order.timeout:
+  level: ALERT
+  channels:
+    - channelType: FEI_SHU
+      templateId: tpl_order_timeout_feishu
+      enabled: true
+      extraConfig:
+        to:
+          - dev1@example.com
+    - channelType: EMAIL
+      templateId: tpl_order_timeout_mail
+      enabled: true
+      extraConfig:
+        to:
+          - ops@example.com
+
+order.created:
+  level: INFO
+  channels:
+    - channelType: DING_TALK
+      templateId: tpl_order_created_dingtalk
+      enabled: true
