@@ -1,5 +1,7 @@
 package com.gtbabc.notifycenter.channel;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gtbabc.notifycenter.channel.config.FeishuNotifyProperties;
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
 import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
@@ -62,7 +64,7 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
             content.put("text", text);
 
             Map<String, Object> body = new HashMap<>();
-            body.put("msg_type", "text");
+            body.put("msg_type", message.getFormat().toString().toLowerCase());
             body.put("content", content);
 
             HttpHeaders headers = new HttpHeaders();
@@ -71,10 +73,41 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
             String resp = restTemplate.postForObject(properties.getWebhookUrl(), entity, String.class);
-            log.debug("[NotifyCenter][Feishu] send success. notifyKey={}, resp={}", message.getNotifyKey(), resp);
+            // 校验响应
+            if (resp == null || resp.isEmpty()) {
+                log.error("[NotifyCenter] Empty response from Feishu webhook, notifyKey={}", message.getNotifyKey());
+                return;
+            }
+
+            // 校验返回的响应是否符合飞书成功的标准
+            if (isValidFeishuResponse(resp)) {
+                log.info("[NotifyCenter] Successfully sent notification to Feishu, notifyKey={}", message.getNotifyKey());
+            }
         } catch (Exception e) {
             log.error("[NotifyCenter][Feishu] send error. notifyKey={}", message.getNotifyKey(), e);
             throw e;
+        }
+    }
+
+    private boolean isValidFeishuResponse(String response) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            // 使用 Jackson 解析 JSON 响应
+            JsonNode jsonResponse = objectMapper.readTree(response);
+            int code = jsonResponse.path("code").asInt();
+
+            // 判断是否成功 (code 为 0)
+            if (code == 0) {
+                return true;
+            }
+
+            // 如果是失败的响应，记录失败信息
+            String errorMsg = jsonResponse.path("msg").asText("Unknown error");
+            log.error("[NotifyCenter] Feishu request failed: code={}, msg={}", code, errorMsg);
+            return false;
+        } catch (Exception e) {
+            log.error("[NotifyCenter] Error parsing Feishu response: ", e);
+            return false;
         }
     }
 }

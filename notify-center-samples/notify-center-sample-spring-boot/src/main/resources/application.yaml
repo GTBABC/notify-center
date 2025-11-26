@@ -18,11 +18,12 @@ spring:
 notify:
   feishu:
     enabled: true
-    webhook-url: https://open.feishu.cn/open-apis/bot/v2/hook/84df1d3c-d2d6-4bf1-ab49-c6d9f82014d4
+    webhook-url: https://open.feishu.cn/open-apis/bot/v2/hook/你的token
 
-  dingding:
+  dingtalk:
     enabled: true
     webhook-url: https://oapi.dingtalk.com/robot/send?access_token=你的token
+    secret:
 
   mail:
     enabled: true

@@ -4,15 +4,18 @@ order.timeout:
     - channelType: FEI_SHU
       templateId: tpl_order_timeout_feishu
       enabled: true
-      extraConfig:
-        to:
-          - dev1@example.com
     - channelType: EMAIL
       templateId: tpl_order_timeout_mail
-      enabled: true
+      enabled: false
       extraConfig:
         to:
           - ops@example.com
+    - channelType: DING_TALK
+      templateId: tpl_order_timeout_dingtalk
+      enabled: true
+      extraConfig:
+        at:
+          isAtAll: true
 
 order.created:
   level: INFO
