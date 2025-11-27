@@ -1,9 +1,14 @@
 tpl_order_timeout_feishu:
-  titleTemplate: "订单超时告警：${orderId}"
-  contentTemplate: |
-    **用户：** ${userId}
-    **错误** 订单 ${orderId} 已超时 ${timeoutMinutes} 分钟
-  format: text
+  titleTemplate: "富文本告警测试：${orderId}"
+  contentTemplate:
+    - - tag: text
+        text: "测试富文本告警"
+      - tag: a
+        text: "请查看${orderId}"
+        href: "http://www.baidu.com/"
+      - tag: at
+        user_id: "all"
+  format: POST
 
 tpl_order_timeout_dingtalk:
   titleTemplate: "订单超时告警：${orderId}"

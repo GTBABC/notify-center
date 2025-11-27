@@ -36,7 +36,7 @@ public class NotifyMessage {
     /**
      * 内容（渲染后的）
      */
-    private String content;
+    private Object content;
 
     /**
      * 业务上下文参数（调用 notify 时传入的 params）

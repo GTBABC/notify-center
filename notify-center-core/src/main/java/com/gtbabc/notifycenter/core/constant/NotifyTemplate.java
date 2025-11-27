@@ -37,5 +37,5 @@ public class NotifyTemplate {
      * 通知的内容模板，包含占位符，用来生成实际的通知内容
      * 例如：`订单 ${orderId} 已超时 ${timeoutMinutes} 分钟`
      */
-    private String contentTemplate;
+    private Object contentTemplate;
 }

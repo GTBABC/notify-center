@@ -6,6 +6,7 @@ import com.gtbabc.notifycenter.channel.config.FeishuNotifyProperties;
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
 import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
 import com.gtbabc.notifycenter.core.constant.NotifyMessage;
+import com.gtbabc.notifycenter.core.constant.TemplateFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -41,55 +42,62 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
     @Override
     public void send(NotifyMessage message) {
         if (!properties.isEnabled()) {
-            log.debug("[NotifyCenter][Feishu] disabled, skip. notifyKey={}", message.getNotifyKey());
+            log.debug("[NotifyCenter][FeiShu] disabled, skip. notifyKey={}", message.getNotifyKey());
             return;
         }
 
         if (properties.getWebhookUrl() == null || properties.getWebhookUrl().isEmpty()) {
-            log.warn("[NotifyCenter][Feishu] webhookUrl is empty, skip. notifyKey={}", message.getNotifyKey());
+            log.warn("[NotifyCenter][FeiShu] webhookUrl is empty, skip. notifyKey={}", message.getNotifyKey());
             return;
         }
 
         try {
-            StringBuilder sb = new StringBuilder();
-            if (message.getTitle() != null && !message.getTitle().isEmpty()) {
-                sb.append("**").append(message.getTitle()).append("**\n\n");
-            }
-            if (message.getContent() != null) {
-                sb.append(message.getContent());
-            }
-            String text = sb.toString();
-
-            Map<String, Object> content = new HashMap<>();
-            content.put("text", text);
-
-            Map<String, Object> body = new HashMap<>();
-            body.put("msg_type", message.getFormat().toString().toLowerCase());
-            body.put("content", content);
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+            Map<String, Object> body = buildBodyByFormat(message);
 
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
             String resp = restTemplate.postForObject(properties.getWebhookUrl(), entity, String.class);
             // 校验响应
             if (resp == null || resp.isEmpty()) {
-                log.error("[NotifyCenter] Empty response from Feishu webhook, notifyKey={}", message.getNotifyKey());
+                log.error("[NotifyCenter] Empty response from FeiShu webhook, notifyKey={}", message.getNotifyKey());
                 return;
             }
 
             // 校验返回的响应是否符合飞书成功的标准
-            if (isValidFeishuResponse(resp)) {
-                log.info("[NotifyCenter] Successfully sent notification to Feishu, notifyKey={}", message.getNotifyKey());
+            if (isValidFeiShuResponse(resp)) {
+                log.info("[NotifyCenter] Successfully sent notification to FeiShu, notifyKey={}", message.getNotifyKey());
             }
         } catch (Exception e) {
-            log.error("[NotifyCenter][Feishu] send error. notifyKey={}", message.getNotifyKey(), e);
+            log.error("[NotifyCenter][FeiShu] send error. notifyKey={}", message.getNotifyKey(), e);
             throw e;
         }
     }
 
-    private boolean isValidFeishuResponse(String response) {
+    private Map<String, Object> buildBodyByFormat(NotifyMessage message) {
+        Map<String, Object> body = new HashMap<>();
+        Map<String, Object> content = new HashMap<>();
+        body.put("content", content);
+        if (message.getFormat() == TemplateFormat.MARKDOWN) {
+            body.put("msg_type", "markdown");
+            content.put("text", message.getContent());
+        } else if (message.getFormat() == TemplateFormat.POST) {
+            body.put("msg_type", "post");
+            Map<String, Object> post = new HashMap<>();
+            content.put("post", post);
+            Map<String, Object> zhCn = new HashMap<>();
+            post.put("zh_cn", zhCn);
+            zhCn.put("title", message.getTitle());
+            zhCn.put("content", message.getContent());
+        } else {
+            body.put("msg_type", "text");
+            content.put("text", message.getContent());
+        }
+        return body;
+    }
+
+    private boolean isValidFeiShuResponse(String response) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             // 使用 Jackson 解析 JSON 响应
@@ -103,10 +111,10 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
 
             // 如果是失败的响应，记录失败信息
             String errorMsg = jsonResponse.path("msg").asText("Unknown error");
-            log.error("[NotifyCenter] Feishu request failed: code={}, msg={}", code, errorMsg);
+            log.error("[NotifyCenter] FeiShu request failed: code={}, msg={}", code, errorMsg);
             return false;
         } catch (Exception e) {
-            log.error("[NotifyCenter] Error parsing Feishu response: ", e);
+            log.error("[NotifyCenter] Error parsing FeiShu response: ", e);
             return false;
         }
     }

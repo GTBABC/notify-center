@@ -2,6 +2,9 @@ package com.gtbabc.notifycenter.core.template.impl;
 
 import com.gtbabc.notifycenter.core.template.TemplateEngine;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SimpleTemplateEngine implements TemplateEngine {
@@ -19,4 +22,27 @@ public class SimpleTemplateEngine implements TemplateEngine {
         }
         return result;
     }
+
+    @Override
+    public Object renderObject(Object obj, Map<String, Object> params) {
+        if (obj instanceof String str) {
+            return render(str, params);
+        }
+        if (obj instanceof Map) {
+            Map<String, Object> newMap = new HashMap<>();
+            ((Map<?, ?>) obj).forEach((k, v) -> {
+                newMap.put(k.toString(), renderObject(v, params));
+            });
+            return newMap;
+        }
+        if (obj instanceof List) {
+            List<Object> list = new ArrayList<>();
+            for (Object item : (List<?>) obj) {
+                list.add(renderObject(item, params));
+            }
+            return list;
+        }
+        return obj;
+    }
+
 }

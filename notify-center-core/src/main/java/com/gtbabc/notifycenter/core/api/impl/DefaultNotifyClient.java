@@ -163,10 +163,10 @@ public class DefaultNotifyClient implements NotifyClient {
                 ctx.setAttempt(attempt);
 
                 String title;
-                String content;
+                Object content;
                 try {
                     title = templateEngine.render(template.getTitleTemplate(), params);
-                    content = templateEngine.render(template.getContentTemplate(), params);
+                    content = templateEngine.renderObject(template.getContentTemplate(), params);
                 } catch (Exception e) {
                     // 模板渲染错误通常没必要重试
                     log.error("[NotifyCenter] render template error, templateId={}, notifyKey={}, channel={}",

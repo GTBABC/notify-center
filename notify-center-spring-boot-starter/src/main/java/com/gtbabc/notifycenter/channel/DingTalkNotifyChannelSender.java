@@ -90,13 +90,13 @@ public class DingTalkNotifyChannelSender implements NotifyChannelSender {
         Map<String, Object> body = new HashMap<>();
         if (message.getFormat() == TemplateFormat.MARKDOWN) {
             body.put("msgtype", "markdown");
-            Map<String, String> markdown = new HashMap<>();
+            Map<String, Object> markdown = new HashMap<>();
             markdown.put("title", message.getTitle());
             markdown.put("text", message.getContent());
             body.put("markdown", markdown);
         } else {
             body.put("msgtype", "text");
-            body.put("text", message.getContent());
+            body.put("text", message.getContent().toString());
         }
         Map<String, Object> channelConfig = message.getChannelConfig();
         if (channelConfig != null && !channelConfig.isEmpty()) {

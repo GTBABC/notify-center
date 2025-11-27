@@ -73,7 +73,7 @@ public class MailNotifyChannelSender implements NotifyChannelSender {
             mail.setSubject(subject);
 
             // 简单处理：模板格式先不管，内容统一用 text
-            mail.setText(message.getContent() != null ? message.getContent() : "");
+            mail.setText(message.getContent() != null ? message.getContent().toString() : "");
 
             mailSender.send(mail);
             log.debug("[NotifyCenter][Mail] send success. notifyKey={}", message.getNotifyKey());

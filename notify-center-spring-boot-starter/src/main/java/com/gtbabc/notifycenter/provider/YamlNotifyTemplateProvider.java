@@ -112,7 +112,7 @@ public class YamlNotifyTemplateProvider implements NotifyTemplateProvider {
             log.warn("[NotifyCenter] template {} in {} has no contentTemplate, skip.", templateId, fileName);
             return null;
         }
-        tpl.setContentTemplate(content.toString());
+        tpl.setContentTemplate(content);
 
         // format
         Object fmtObj = tplData.get("format");
