@@ -36,14 +36,14 @@ public class DefaultNotifyClient implements NotifyClient {
     private final NotifyRuleProvider ruleProvider;
     private final NotifyTemplateProvider templateProvider;
     private final TemplateEngine templateEngine;
-    private final Map<NotifyChannelType, NotifyChannelSender> senderMap;
+    private final Map<String, NotifyChannelSender> senderMap;
     private final List<NotifyInterceptor> interceptors;
     private final RetryPolicy retryPolicy;
 
     public DefaultNotifyClient(NotifyRuleProvider ruleProvider,
                                NotifyTemplateProvider templateProvider,
                                TemplateEngine templateEngine,
-                               Map<NotifyChannelType, NotifyChannelSender> senderMap) {
+                               Map<String, NotifyChannelSender> senderMap) {
         this(ruleProvider, templateProvider, templateEngine, senderMap,
                 Collections.emptyList(), new NoRetryPolicy());
     }
@@ -51,7 +51,7 @@ public class DefaultNotifyClient implements NotifyClient {
     public DefaultNotifyClient(NotifyRuleProvider ruleProvider,
                                NotifyTemplateProvider templateProvider,
                                TemplateEngine templateEngine,
-                               Map<NotifyChannelType, NotifyChannelSender> senderMap,
+                               Map<String, NotifyChannelSender> senderMap,
                                List<NotifyInterceptor> interceptors,
                                RetryPolicy retryPolicy) {
         this.ruleProvider = Objects.requireNonNull(ruleProvider, "ruleProvider must not be null");

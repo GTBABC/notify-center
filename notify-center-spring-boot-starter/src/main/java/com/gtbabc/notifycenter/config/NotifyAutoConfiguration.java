@@ -9,7 +9,6 @@ import com.gtbabc.notifycenter.channel.config.MailNotifyProperties;
 import com.gtbabc.notifycenter.core.api.NotifyClient;
 import com.gtbabc.notifycenter.core.api.impl.DefaultNotifyClient;
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
-import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
 import com.gtbabc.notifycenter.core.provider.NotifyRuleProvider;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
 import com.gtbabc.notifycenter.core.template.TemplateEngine;
@@ -79,7 +78,7 @@ public class NotifyAutoConfiguration {
                                      TemplateEngine templateEngine,
                                      List<NotifyChannelSender> senders) {
 
-        Map<NotifyChannelType, NotifyChannelSender> senderMap = senders.stream()
+        Map<String, NotifyChannelSender> senderMap = senders.stream()
                 .collect(Collectors.toMap(NotifyChannelSender::getChannelType, s -> s));
 
         return new DefaultNotifyClient(ruleProvider, templateProvider, templateEngine, senderMap);

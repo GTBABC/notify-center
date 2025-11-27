@@ -35,8 +35,8 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
      * 返回当前发送器对应的渠道类型
      */
     @Override
-    public NotifyChannelType getChannelType() {
-        return NotifyChannelType.FEI_SHU;
+    public String getChannelType() {
+        return NotifyChannelType.FEI_SHU.name();
     }
 
     @Override

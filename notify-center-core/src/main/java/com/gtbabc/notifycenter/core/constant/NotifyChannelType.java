@@ -23,11 +23,26 @@ public enum NotifyChannelType {
      * 邮件，传统的电子邮件发送方式
      * 通过 SMTP 发送，适合发送格式化的通知和报告
      */
-    EMAIL;
+    EMAIL,
 
-    // 后续可以扩展更多渠道，如：
-    // - SMS（短信）
-    // - WEWORK（企业微信）
-    // - SLACK（Slack 通讯工具）
-    // - PUSH_NOTIFICATION（推送通知）
+
+    /**
+     * 短信，用于发送手机短信
+     */
+    SMS,
+
+    /**
+     * 企业微信，用于企业内部沟通
+     */
+    WEWORK,
+
+    /**
+     * Slack，用于企业内部沟通
+     */
+    SLACK,
+
+    /**
+     * 微信，用于企业内部沟通
+     */
+    PUSH_NOTIFICATION;
 }

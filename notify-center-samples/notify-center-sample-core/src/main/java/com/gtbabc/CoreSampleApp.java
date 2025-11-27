@@ -31,7 +31,7 @@ public class CoreSampleApp {
 
         NotifyChannelSender consoleSender = new ConsoleNotifyChannelSender();
 
-        Map<NotifyChannelType, NotifyChannelSender> senderMap = Map.of(
+        Map<String, NotifyChannelSender> senderMap = Map.of(
                 consoleSender.getChannelType(), consoleSender
         );
 
@@ -93,8 +93,8 @@ public class CoreSampleApp {
      */
     static class ConsoleNotifyChannelSender implements NotifyChannelSender {
         @Override
-        public NotifyChannelType getChannelType() {
-            return NotifyChannelType.DING_TALK;
+        public String getChannelType() {
+            return NotifyChannelType.DING_TALK.name();
         }
 
         @Override

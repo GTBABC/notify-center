@@ -35,8 +35,8 @@ public class DingTalkNotifyChannelSender implements NotifyChannelSender {
     }
 
     @Override
-    public NotifyChannelType getChannelType() {
-        return NotifyChannelType.DING_TALK;
+    public String getChannelType() {
+        return NotifyChannelType.DING_TALK.name();
     }
 
     @Override
