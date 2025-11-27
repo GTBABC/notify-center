@@ -17,6 +17,7 @@ import com.gtbabc.notifycenter.provider.YamlNotifyRuleProvider;
 import com.gtbabc.notifycenter.provider.YamlNotifyTemplateProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -54,19 +55,19 @@ public class NotifyAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(FeishuNotifyChannelSender.class)
+    @ConditionalOnProperty(name = "notify.feishu.enabled", havingValue = "true")
     public FeishuNotifyChannelSender feishuNotifyChannelSender(FeishuNotifyProperties properties, RestTemplate restTemplate) {
         return new FeishuNotifyChannelSender(properties, restTemplate);
     }
 
     @Bean
-    @ConditionalOnMissingBean(MailNotifyChannelSender.class)
+    @ConditionalOnProperty(name = "notify.mail.enabled", havingValue = "true")
     public MailNotifyChannelSender mailNotifyChannelSender(MailNotifyProperties properties, JavaMailSender mailSender) {
         return new MailNotifyChannelSender(properties, mailSender);
     }
 
     @Bean
-    @ConditionalOnMissingBean(DingTalkNotifyChannelSender.class)
+    @ConditionalOnProperty(name = "notify.dingtalk.enabled", havingValue = "true")
     public DingTalkNotifyChannelSender dingTalkNotifyChannelSender(DingTalkNotifyProperties properties, RestTemplate restTemplate) {
         return new DingTalkNotifyChannelSender(properties, restTemplate);
     }
