@@ -16,16 +16,18 @@ import java.util.Map;
  * 从 classpath:/notify/templates/*.yml 加载模板定义
  * 约定 YAML 结构：
  * tpl_order_timeout:
- *   titleTemplate: "订单超时：${orderId}"
- *   contentTemplate: "订单 ${orderId} 已超时 ${timeoutMinutes} 分钟"
- *   format: MARKDOWN
+ * titleTemplate: "订单超时：${orderId}"
+ * contentTemplate: "订单 ${orderId} 已超时 ${timeoutMinutes} 分钟"
+ * format: MARKDOWN
  */
 @Slf4j
 public class YamlNotifyTemplateProvider implements NotifyTemplateProvider {
 
     private static final String TEMPLATE_LOCATION_PATTERN = "classpath*:notify/templates/*.yml";
 
-    /** 缓存所有模板，key = templateId */
+    /**
+     * 缓存所有模板，key = templateId
+     */
     private final Map<String, NotifyTemplate> templateCache = new HashMap<>();
 
     public YamlNotifyTemplateProvider() {

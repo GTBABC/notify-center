@@ -68,11 +68,16 @@ public class DefaultNotifyClient implements NotifyClient {
     }
 
     @Override
-    public NotifyResult notify(String notifyKey, NotifyLevel overrideLevel, Map<String, Object> params) {
-        return execute(notifyKey, overrideLevel, params);
+    public NotifyResult notify(String notifyKey, NotifyLevel level, Map<String, Object> params) {
+        return notify(notifyKey, null, level, params);
     }
 
-    private NotifyResult execute(String notifyKey, NotifyLevel overrideLevel, Map<String, Object> params) {
+    @Override
+    public NotifyResult notify(String notifyKey, String templateId, NotifyLevel level, Map<String, Object> params) {
+        return execute(notifyKey, templateId, level, params);
+    }
+
+    private NotifyResult execute(String notifyKey, String templateId, NotifyLevel overrideLevel, Map<String, Object> params) {
         NotifyResult result = new NotifyResult();
         result.setNotifyKey(notifyKey);
         result.setChannelResults(new HashMap<>());
@@ -125,19 +130,14 @@ public class DefaultNotifyClient implements NotifyClient {
                 continue;
             }
 
-            String templateId = channelRule.getTemplateId();
-            if (templateId == null || templateId.isEmpty()) {
-                log.warn("[NotifyCenter] templateId is empty for notifyKey={}, channel={}", notifyKey, channelType);
-                chResult.setSuccess(false);
-                chResult.setErrorCode("TEMPLATE_ID_EMPTY");
-                chResult.setErrorMessage("templateId is empty");
-                continue;
-            }
-
             NotifyTemplate template = templateProvider.getTemplate(templateId);
             if (template == null) {
-                log.warn("[NotifyCenter] no template found, templateId={}, notifyKey={}, channel={}",
-                        templateId, notifyKey, channelType);
+                template = templateProvider.getTemplate(channelRule.getTemplateId());
+            }
+
+            if (template == null) {
+                log.warn("[NotifyCenter] no template found, templateId={}, rule's templateId={}, notifyKey={}, channel={}",
+                        templateId, channelRule.getTemplateId(), notifyKey, channelType);
                 chResult.setSuccess(false);
                 chResult.setErrorCode("TEMPLATE_NOT_FOUND");
                 chResult.setErrorMessage("template not found: " + templateId);

@@ -26,7 +26,7 @@ notify:
     secret:
 
   mail:
-    enabled: true
+    enabled: false
     from: no-reply@example.com
     to:
       - dev-team@example.com

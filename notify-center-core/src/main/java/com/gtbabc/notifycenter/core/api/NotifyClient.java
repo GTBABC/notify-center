@@ -19,6 +19,11 @@ public interface NotifyClient {
      * 指定等级发送通知
      */
     NotifyResult notify(String notifyKey, NotifyLevel level, Map<String, Object> params);
+
+    /**
+     * 指定模板等级发送通知
+     */
+    NotifyResult notify(String notifyKey, String templateId, NotifyLevel level, Map<String, Object> params);
 }
 
 

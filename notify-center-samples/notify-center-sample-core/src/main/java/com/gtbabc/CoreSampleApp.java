@@ -75,6 +75,9 @@ public class CoreSampleApp {
     static class InMemoryTemplateProvider implements NotifyTemplateProvider {
         @Override
         public NotifyTemplate getTemplate(String templateId) {
+            if (templateId == null || templateId.isEmpty()) {
+                return null;
+            }
             if (!"tpl_order_timeout_console".equals(templateId)) {
                 return null;
             }
