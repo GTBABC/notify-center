@@ -2,7 +2,7 @@ order.timeout:
   level: ALERT
   channels:
     - channelType: FEI_SHU
-      templateId: tpl_order_timeout_feishu
+      templateId: tpl_card_feishu
       enabled: true
     - channelType: EMAIL
       templateId: tpl_order_timeout_mail

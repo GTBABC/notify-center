@@ -9,10 +9,11 @@ import com.gtbabc.notifycenter.channel.config.MailNotifyProperties;
 import com.gtbabc.notifycenter.core.api.NotifyClient;
 import com.gtbabc.notifycenter.core.api.impl.DefaultNotifyClient;
 import com.gtbabc.notifycenter.core.channel.NotifyChannelSender;
+import com.gtbabc.notifycenter.core.constant.NotifyChannelType;
 import com.gtbabc.notifycenter.core.provider.NotifyRuleProvider;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
-import com.gtbabc.notifycenter.core.template.TemplateEngine;
-import com.gtbabc.notifycenter.core.template.impl.SimpleTemplateEngine;
+import com.gtbabc.notifycenter.core.template.NotifyTemplateEngine;
+import com.gtbabc.notifycenter.core.template.impl.SimpleNotifyTemplateEngine;
 import com.gtbabc.notifycenter.provider.YamlNotifyRuleProvider;
 import com.gtbabc.notifycenter.provider.YamlNotifyTemplateProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -32,9 +33,9 @@ import java.util.stream.Collectors;
 public class NotifyAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(TemplateEngine.class)
-    public TemplateEngine templateEngine() {
-        return new SimpleTemplateEngine();
+    @ConditionalOnMissingBean(NotifyTemplateEngine.class)
+    public NotifyTemplateEngine notifyTemplateEngine() {
+        return new SimpleNotifyTemplateEngine();
     }
 
     @Bean
@@ -76,12 +77,12 @@ public class NotifyAutoConfiguration {
     @ConditionalOnMissingBean(NotifyClient.class)
     public NotifyClient notifyClient(NotifyRuleProvider ruleProvider,
                                      NotifyTemplateProvider templateProvider,
-                                     TemplateEngine templateEngine,
+                                     NotifyTemplateEngine notifyTemplateEngine,
                                      List<NotifyChannelSender> senders) {
 
-        Map<String, NotifyChannelSender> senderMap = senders.stream()
+        Map<NotifyChannelType, NotifyChannelSender> senderMap = senders.stream()
                 .collect(Collectors.toMap(NotifyChannelSender::getChannelType, s -> s));
 
-        return new DefaultNotifyClient(ruleProvider, templateProvider, templateEngine, senderMap);
+        return new DefaultNotifyClient(ruleProvider, templateProvider, notifyTemplateEngine, senderMap);
     }
 }

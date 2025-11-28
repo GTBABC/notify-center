@@ -12,8 +12,8 @@ import com.gtbabc.notifycenter.core.constant.NotifyTemplate;
 import com.gtbabc.notifycenter.core.constant.TemplateFormat;
 import com.gtbabc.notifycenter.core.provider.NotifyRuleProvider;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
-import com.gtbabc.notifycenter.core.template.TemplateEngine;
-import com.gtbabc.notifycenter.core.template.impl.SimpleTemplateEngine;
+import com.gtbabc.notifycenter.core.template.NotifyTemplateEngine;
+import com.gtbabc.notifycenter.core.template.impl.SimpleNotifyTemplateEngine;
 
 import java.util.List;
 import java.util.Map;
@@ -27,18 +27,14 @@ public class CoreSampleApp {
         // 1. 准备 Provider 和 Sender
         NotifyRuleProvider ruleProvider = new InMemoryRuleProvider();
         NotifyTemplateProvider templateProvider = new InMemoryTemplateProvider();
-        TemplateEngine templateEngine = new SimpleTemplateEngine();
+        NotifyTemplateEngine notifyTemplateEngine = new SimpleNotifyTemplateEngine();
 
         NotifyChannelSender consoleSender = new ConsoleNotifyChannelSender();
 
-        Map<String, NotifyChannelSender> senderMap = Map.of(
-                consoleSender.getChannelType(), consoleSender
-        );
+        Map<NotifyChannelType, NotifyChannelSender> senderMap = Map.of(consoleSender.getChannelType(), consoleSender);
 
         // 2. 组装 NotifyClient
-        NotifyClient notifyClient = new DefaultNotifyClient(
-                ruleProvider, templateProvider, templateEngine, senderMap
-        );
+        NotifyClient notifyClient = new DefaultNotifyClient(ruleProvider, templateProvider, notifyTemplateEngine, senderMap);
 
         // 3. 调用 notify
         notifyClient.notify("order.timeout", Map.of(
@@ -96,8 +92,8 @@ public class CoreSampleApp {
      */
     static class ConsoleNotifyChannelSender implements NotifyChannelSender {
         @Override
-        public String getChannelType() {
-            return NotifyChannelType.DING_TALK.name();
+        public NotifyChannelType getChannelType() {
+            return NotifyChannelType.DING_TALK;
         }
 
         @Override

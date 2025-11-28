@@ -15,7 +15,7 @@ import com.gtbabc.notifycenter.core.constant.NotifyRule;
 import com.gtbabc.notifycenter.core.constant.NotifyTemplate;
 import com.gtbabc.notifycenter.core.provider.NotifyRuleProvider;
 import com.gtbabc.notifycenter.core.provider.NotifyTemplateProvider;
-import com.gtbabc.notifycenter.core.template.TemplateEngine;
+import com.gtbabc.notifycenter.core.template.NotifyTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -35,28 +35,28 @@ public class DefaultNotifyClient implements NotifyClient {
 
     private final NotifyRuleProvider ruleProvider;
     private final NotifyTemplateProvider templateProvider;
-    private final TemplateEngine templateEngine;
-    private final Map<String, NotifyChannelSender> senderMap;
+    private final NotifyTemplateEngine notifyTemplateEngine;
+    private final Map<NotifyChannelType, NotifyChannelSender> senderMap;
     private final List<NotifyInterceptor> interceptors;
     private final RetryPolicy retryPolicy;
 
     public DefaultNotifyClient(NotifyRuleProvider ruleProvider,
                                NotifyTemplateProvider templateProvider,
-                               TemplateEngine templateEngine,
-                               Map<String, NotifyChannelSender> senderMap) {
-        this(ruleProvider, templateProvider, templateEngine, senderMap,
+                               NotifyTemplateEngine notifyTemplateEngine,
+                               Map<NotifyChannelType, NotifyChannelSender> senderMap) {
+        this(ruleProvider, templateProvider, notifyTemplateEngine, senderMap,
                 Collections.emptyList(), new NoRetryPolicy());
     }
 
     public DefaultNotifyClient(NotifyRuleProvider ruleProvider,
                                NotifyTemplateProvider templateProvider,
-                               TemplateEngine templateEngine,
-                               Map<String, NotifyChannelSender> senderMap,
+                               NotifyTemplateEngine notifyTemplateEngine,
+                               Map<NotifyChannelType, NotifyChannelSender> senderMap,
                                List<NotifyInterceptor> interceptors,
                                RetryPolicy retryPolicy) {
         this.ruleProvider = Objects.requireNonNull(ruleProvider, "ruleProvider must not be null");
         this.templateProvider = Objects.requireNonNull(templateProvider, "templateProvider must not be null");
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.notifyTemplateEngine = Objects.requireNonNull(notifyTemplateEngine, "templateEngine must not be null");
         this.senderMap = Objects.requireNonNull(senderMap, "senderMap must not be null");
         this.interceptors = interceptors != null ? interceptors : Collections.emptyList();
         this.retryPolicy = retryPolicy != null ? retryPolicy : new NoRetryPolicy();
@@ -64,7 +64,7 @@ public class DefaultNotifyClient implements NotifyClient {
 
     @Override
     public NotifyResult notify(String notifyKey, Map<String, Object> params) {
-        return notify(notifyKey, null, params);
+        return notify(notifyKey, null, null, params);
     }
 
     @Override
@@ -73,11 +73,16 @@ public class DefaultNotifyClient implements NotifyClient {
     }
 
     @Override
-    public NotifyResult notify(String notifyKey, String templateId, NotifyLevel level, Map<String, Object> params) {
-        return execute(notifyKey, templateId, level, params);
+    public NotifyResult notify(String notifyKey, String prefixTemplateId, Map<String, Object> params) {
+        return notify(notifyKey, prefixTemplateId, null, params);
     }
 
-    private NotifyResult execute(String notifyKey, String templateId, NotifyLevel overrideLevel, Map<String, Object> params) {
+    @Override
+    public NotifyResult notify(String notifyKey, String prefixTemplateId, NotifyLevel level, Map<String, Object> params) {
+        return execute(notifyKey, prefixTemplateId, level, params);
+    }
+
+    private NotifyResult execute(String notifyKey, String prefixTemplateId, NotifyLevel overrideLevel, Map<String, Object> params) {
         NotifyResult result = new NotifyResult();
         result.setNotifyKey(notifyKey);
         result.setChannelResults(new HashMap<>());
@@ -130,6 +135,7 @@ public class DefaultNotifyClient implements NotifyClient {
                 continue;
             }
 
+            String templateId = prefixTemplateId != null && !prefixTemplateId.isEmpty() ? prefixTemplateId + "_" + channelType : null;
             NotifyTemplate template = templateProvider.getTemplate(templateId);
             if (template == null) {
                 template = templateProvider.getTemplate(channelRule.getTemplateId());
@@ -165,8 +171,8 @@ public class DefaultNotifyClient implements NotifyClient {
                 String title;
                 Object content;
                 try {
-                    title = templateEngine.render(template.getTitleTemplate(), params);
-                    content = templateEngine.renderObject(template.getContentTemplate(), params);
+                    title = notifyTemplateEngine.render(template.getTitleTemplate(), params);
+                    content = notifyTemplateEngine.renderObject(template.getContentTemplate(), params);
                 } catch (Exception e) {
                     // 模板渲染错误通常没必要重试
                     log.error("[NotifyCenter] render template error, templateId={}, notifyKey={}, channel={}",

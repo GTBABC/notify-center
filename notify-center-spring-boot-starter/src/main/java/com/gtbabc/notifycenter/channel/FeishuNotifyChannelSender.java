@@ -1,5 +1,6 @@
 package com.gtbabc.notifycenter.channel;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gtbabc.notifycenter.channel.config.FeishuNotifyProperties;
@@ -31,12 +32,14 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
         this.restTemplate = Objects.requireNonNull(restTemplate, "restTemplate must not be null");
     }
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * 返回当前发送器对应的渠道类型
      */
     @Override
-    public String getChannelType() {
-        return NotifyChannelType.FEI_SHU.name();
+    public NotifyChannelType getChannelType() {
+        return NotifyChannelType.FEI_SHU;
     }
 
     @Override
@@ -78,20 +81,49 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
     private Map<String, Object> buildBodyByFormat(NotifyMessage message) {
         Map<String, Object> body = new HashMap<>();
         Map<String, Object> content = new HashMap<>();
-        body.put("content", content);
         if (message.getFormat() == TemplateFormat.MARKDOWN) {
             body.put("msg_type", "markdown");
+            body.put("content", content);
             content.put("text", message.getContent());
         } else if (message.getFormat() == TemplateFormat.POST) {
             body.put("msg_type", "post");
+            body.put("content", content);
             Map<String, Object> post = new HashMap<>();
             content.put("post", post);
             Map<String, Object> zhCn = new HashMap<>();
             post.put("zh_cn", zhCn);
             zhCn.put("title", message.getTitle());
             zhCn.put("content", message.getContent());
+        } else if (message.getFormat() == TemplateFormat.CARD) {
+            Object conentObject = message.getContent();
+            if(conentObject instanceof Map<?,?>){
+                Map<String, Object> cardMap = (Map<String, Object>) conentObject;
+                String templateId = (String) cardMap.get("template_id");
+                if (templateId != null && !templateId.isEmpty()) {
+                    String templateVersionName = (String) cardMap.getOrDefault("template_version_name", "1.0.0");
+                    Map<String, String> templateVariableMap = (Map<String, String>) cardMap.get("template_variable");
+                    body.put("msg_type", "interactive");
+                    Map<String, Object> card = new HashMap<>();
+                    body.put("card", card);
+                    card.put("type", "template");
+                    Map<String, Object> data = new HashMap<>();
+                    card.put("data", data);
+                    data.put("template_id", templateId);
+                    data.put("template_version_name", templateVersionName);
+                    data.put("template_variable", templateVariableMap);
+                } else {
+                    String templateJson = (String) cardMap.get("template_json");
+                    try {
+                        return objectMapper.readValue(templateJson, new TypeReference<>() {
+                        });
+                    } catch (Exception e) {
+                        log.error("[NotifyCenter] Error parsing FeiShu templateJson: ", e);
+                    }
+                }
+            }
         } else {
             body.put("msg_type", "text");
+            body.put("content", content);
             content.put("text", message.getContent());
         }
         return body;
@@ -99,7 +131,6 @@ public class FeishuNotifyChannelSender implements NotifyChannelSender {
 
     private boolean isValidFeiShuResponse(String response) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             // 使用 Jackson 解析 JSON 响应
             JsonNode jsonResponse = objectMapper.readTree(response);
             int code = jsonResponse.path("code").asInt();

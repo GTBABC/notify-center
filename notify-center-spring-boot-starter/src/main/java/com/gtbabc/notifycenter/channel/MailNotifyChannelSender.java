@@ -30,8 +30,8 @@ public class MailNotifyChannelSender implements NotifyChannelSender {
      * 返回当前发送器对应的渠道类型
      */
     @Override
-    public String getChannelType() {
-        return NotifyChannelType.EMAIL.name();
+    public NotifyChannelType getChannelType() {
+        return NotifyChannelType.EMAIL;
     }
 
     @Override

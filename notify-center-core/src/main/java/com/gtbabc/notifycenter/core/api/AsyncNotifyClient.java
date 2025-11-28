@@ -15,4 +15,8 @@ public interface AsyncNotifyClient {
     CompletableFuture<NotifyResult> notifyAsync(String notifyKey, Map<String, Object> params);
 
     CompletableFuture<NotifyResult> notifyAsync(String notifyKey, NotifyLevel level, Map<String, Object> params);
+
+    CompletableFuture<NotifyResult> notifyAsync(String notifyKey, String prefixTemplateId, Map<String, Object> params);
+
+    CompletableFuture<NotifyResult> notifyAsync(String notifyKey, String prefixTemplateId, NotifyLevel level, Map<String, Object> params);
 }

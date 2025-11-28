@@ -27,7 +27,7 @@
   - `NotifyRuleProvider`：规则提供者（notifyKey → NotifyRule）
   - `NotifyTemplateProvider`：模板提供者（templateId → NotifyTemplate）
   - `NotifyChannelSender`：渠道发送适配器
-  - `TemplateEngine`：模板引擎
+  - `NotifyTemplateEngine`：模板引擎
 - 提供默认实现：
   - `DefaultNotifyClient`：完成「规则 → 模板 → 渲染 → 调用 Sender」的完整流程
   - `SimpleTemplateEngine`：基于 `${key}` 的简单字符串替换
@@ -49,7 +49,7 @@
 - 提供默认 Sender 示例（如钉钉 Sender：当前仅输出日志）
 - 提供自动装配：
   - `NotifyAutoConfiguration` 自动注册：
-    - `TemplateEngine`（默认 `SimpleTemplateEngine`）
+    - `NotifyTemplateEngine`（默认 `SimpleTemplateEngine`）
     - `NotifyRuleProvider` / `NotifyTemplateProvider`
     - 默认 `NotifyChannelSender` 实例
     - 组装为 `DefaultNotifyClient`，暴露 `NotifyClient` Bean
@@ -186,6 +186,6 @@ public class DemoController {
 - 自定义渠道 Sender：
   - 实现 `NotifyChannelSender`（例如飞书、邮件、企业微信等），并在 Spring 中声明为 Bean。
 - 自定义模板引擎：
-  - 实现 `TemplateEngine`，如接入 Freemarker/Thymeleaf 等模板引擎。
+  - 实现 `NotifyTemplateEngine`，如接入 Freemarker/Thymeleaf 等模板引擎。
 
 通过这些扩展点，可以在不修改 `notify-center-core` 的前提下应对复杂的通知/告警需求。

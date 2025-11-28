@@ -1,6 +1,6 @@
 package com.gtbabc.notifycenter.core.template.impl;
 
-import com.gtbabc.notifycenter.core.template.TemplateEngine;
+import com.gtbabc.notifycenter.core.template.NotifyTemplateEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SimpleTemplateEngine implements TemplateEngine {
+public class SimpleNotifyTemplateEngine implements NotifyTemplateEngine {
 
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 

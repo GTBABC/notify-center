@@ -18,19 +18,19 @@ import java.util.Map;
 
 /**
  * 从 classpath:/notify/rules/*.yml 加载通知规则
- *
+ * <p>
  * 约定 YAML 结构示例：
- *
+ * <p>
  * order.timeout:
- *   level: ALERT
- *   channels:
- *     - channelType: FEI_SHU
- *       templateId: order_timeout_feishu
- *       enabled: true
- *       extraConfig:
- *         to:
- *           - dev1@example.com
- *           - dev2@example.com
+ * level: ALERT
+ * channels:
+ * - channelType: FEI_SHU
+ * templateId: order_timeout_feishu
+ * enabled: true
+ * extraConfig:
+ * to:
+ * - dev1@example.com
+ * - dev2@example.com
  */
 @Slf4j
 public class YamlNotifyRuleProvider implements NotifyRuleProvider {
@@ -143,8 +143,6 @@ public class YamlNotifyRuleProvider implements NotifyRuleProvider {
     private ChannelRule parseChannelRule(String notifyKey, Map<String, Object> chData, String fileName) {
 
         ChannelRule ch = new ChannelRule();
-
-        // channelType
         Object typeVal = chData.get("channelType");
         if (typeVal == null) {
             log.warn("[NotifyCenter] channel in rule {} of {} has no channelType, skip.", notifyKey, fileName);

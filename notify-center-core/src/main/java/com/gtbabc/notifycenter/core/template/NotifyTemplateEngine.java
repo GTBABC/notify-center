@@ -2,7 +2,7 @@ package com.gtbabc.notifycenter.core.template;
 
 import java.util.Map;
 
-public interface TemplateEngine {
+public interface NotifyTemplateEngine {
 
     String render(String template, Map<String, Object> params);
 
