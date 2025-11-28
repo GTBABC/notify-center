@@ -64,20 +64,31 @@ public class YamlNotifyTemplateProvider implements NotifyTemplateProvider {
                     }
 
                     for (Map.Entry<String, Object> entry : yamlData.entrySet()) {
-                        String templateId = entry.getKey();
+                        String prefixTemplateId = entry.getKey();
                         Object value = entry.getValue();
 
                         if (!(value instanceof Map)) {
-                            log.warn("[NotifyCenter] template {} in {} is not a map, skip.",
-                                    templateId, resource.getFilename());
+                            log.warn("[NotifyCenter] prefixTemplateId {} in {} is not a map, skip.",
+                                    prefixTemplateId, resource.getFilename());
                             continue;
                         }
 
                         Map<String, Object> tplData = (Map<String, Object>) value;
 
-                        NotifyTemplate tpl = parseTemplate(templateId, tplData, resource.getFilename());
-                        if (tpl != null) {
-                            templateCache.put(templateId, tpl);
+                        for (Map.Entry<String, Object> templateEntry : tplData.entrySet()) {
+                            String templateId = prefixTemplateId + "_" + templateEntry.getKey();
+                            Object templateValue = templateEntry.getValue();
+
+                            if (!(templateValue instanceof Map)) {
+                                log.warn("[NotifyCenter] template {} in {} is not a map, skip.",
+                                        templateId, resource.getFilename());
+                                continue;
+                            }
+                            Map<String, Object> templateMap = (Map<String, Object>) templateValue;
+                            NotifyTemplate tpl = parseTemplate(templateId, templateMap, resource.getFilename());
+                            if (tpl != null) {
+                                templateCache.put(templateId, tpl);
+                            }
                         }
                     }
 

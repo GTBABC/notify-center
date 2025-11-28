@@ -123,25 +123,26 @@ order.created:
 在resources 目录下创建 `notify/templates/*.yml` 文件, 配置通知规则：
 
 ```yaml
-tpl_order_timeout_feishu:
-  titleTemplate: "订单超时告警：${orderId}"
-  contentTemplate: |
-    用户：${userId}
-    订单 ${orderId} 已超时 ${timeoutMinutes} 分钟
-  format: MARKDOWN
+tpl_order_timeout:
+  FEI_SHU:
+    titleTemplate: "订单超时告警：${orderId}"
+    contentTemplate: |
+      用户：${userId}
+      订单 ${orderId} 已超时 ${timeoutMinutes} 分钟
+    format: MARKDOWN
 
-tpl_order_timeout_mail:
-  titleTemplate: "订单超时：${orderId}"
-  contentTemplate: |
-    订单 ${orderId} 已超时 ${timeoutMinutes} 分钟，请尽快处理。
-  format: TEXT
+  MAIL:
+    titleTemplate: "订单超时：${orderId}"
+    contentTemplate: |
+      订单 ${orderId} 已超时 ${timeoutMinutes} 分钟，请尽快处理。
+    format: TEXT
 
-tpl_order_created_dingtalk:
-  titleTemplate: "新订单创建：${orderId}"
-  contentTemplate: |
-    用户：${userId}
-    新订单已创建，金额：${amount}
-  format: MARKDOWN
+  DING_TALK:
+    titleTemplate: "新订单创建：${orderId}"
+    contentTemplate: |
+      用户：${userId}
+      新订单已创建，金额：${amount}
+    format: MARKDOWN
 ```
 
 

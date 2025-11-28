@@ -41,17 +41,17 @@ public class ExecutorAsyncNotifyClient implements AsyncNotifyClient {
     }
 
     @Override
-    public CompletableFuture<NotifyResult> notifyAsync(String notifyKey, String prefixTemplateId, Map<String, Object> params) {
+    public CompletableFuture<NotifyResult> notifyAsync(String notifyKey, String templateId, Map<String, Object> params) {
         return CompletableFuture.supplyAsync(
-                () -> delegate.notify(notifyKey, prefixTemplateId, params),
+                () -> delegate.notify(notifyKey, templateId, params),
                 executor
         );
     }
 
     @Override
-    public CompletableFuture<NotifyResult> notifyAsync(String notifyKey, String prefixTemplateId, NotifyLevel level, Map<String, Object> params) {
+    public CompletableFuture<NotifyResult> notifyAsync(String notifyKey, String templateId, NotifyLevel level, Map<String, Object> params) {
         return CompletableFuture.supplyAsync(
-                () -> delegate.notify(notifyKey, prefixTemplateId, level, params),
+                () -> delegate.notify(notifyKey, templateId, level, params),
                 executor
         );
     }

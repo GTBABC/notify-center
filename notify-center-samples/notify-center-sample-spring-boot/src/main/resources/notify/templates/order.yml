@@ -1,36 +1,29 @@
-tpl_card_feishu:
-  titleTemplate: "card模版测试"
-  contentTemplate:
-    template_id: "模版ID"
-    template_version_name: "1.0.0"
-    template_variable:
-      open_id: "xxx"
-      title: "祝福"
-  format: CARD
+tpl_order_timeout:
+  FEI_SHU:
+    titleTemplate: "card模版测试"
+    contentTemplate:
+      template_id: "模版ID"
+      template_version_name: "1.0.0"
+      template_variable:
+        open_id: "xxx"
+        title: "祝福"
+    format: CARD
+  DING_TALK:
+    titleTemplate: "订单超时告警：${orderId}"
+    contentTemplate: |
+      **用户：** ${userId}
+      **错误** 订单 ${orderId} 已超时 ${timeoutMinutes} 分钟
+    format: MARKDOWN
+  MAIL:
+    titleTemplate: "订单超时：${orderId}"
+    contentTemplate: |
+      订单 ${orderId} 已超时 ${timeoutMinutes} 分钟，请尽快处理。
+    format: TEXT
 
-tpl_card_json_feishu:
-  titleTemplate: "card json测试"
-  contentTemplate:
-    template_son: |
-      {"msg_type":"interactive","card":{"schema":"2.0","config":{"update_multi":true,"style":{"text_size":{"normal_v2":{"default":"normal","pc":"normal","mobile":"heading"}}}},"body":{"direction":"vertical","padding":"12px 12px 12px 12px","elements":[{"tag":"markdown","content":"告警西湖，位于中国浙江省杭州市西湖区龙井路1号，杭州市区西部，汇水面积为21.22平方千米，湖面面积为6.38平方千米。","text_align":"left","text_size":"normal_v2","margin":"0px 0px 0px 0px"},{"tag":"button","text":{"tag":"plain_text","content":"🌞更多景点介绍告警"},"type":"default","width":"default","size":"medium","behaviors":[{"type":"open_url","default_url":"https://baike.baidu.com/item/%E8%A5%BF%E6%B9%96/4668821","pc_url":"","ios_url":"","android_url":""}],"margin":"0px 0px 0px 0px"}]},"header":{"title":{"tag":"plain_text","content":"今日旅游推荐告警"},"subtitle":{"tag":"plain_text","content":"告警"},"template":"blue","padding":"12px 12px 12px 12px"}}}
-  format: CARD
-
-tpl_order_timeout_dingtalk:
-  titleTemplate: "订单超时告警：${orderId}"
-  contentTemplate: |
-    **用户：** ${userId}
-    **错误** 订单 ${orderId} 已超时 ${timeoutMinutes} 分钟
-  format: MARKDOWN
-
-tpl_order_timeout_mail:
-  titleTemplate: "订单超时：${orderId}"
-  contentTemplate: |
-    订单 ${orderId} 已超时 ${timeoutMinutes} 分钟，请尽快处理。
-  format: TEXT
-
-tpl_order_created_dingtalk:
-  titleTemplate: "新订单创建：${orderId}"
-  contentTemplate: |
-    用户：${userId}
-    新订单已创建，金额：${amount}
-  format: MARKDOWN
+tpl_card_json_example:
+  FEI_SHU:
+    titleTemplate: "card json测试"
+    contentTemplate:
+      template_son: |
+        {"msg_type":"interactive","card":{"schema":"2.0","config":{"update_multi":true,"style":{"text_size":{"normal_v2":{"default":"normal","pc":"normal","mobile":"heading"}}}},"body":{"direction":"vertical","padding":"12px 12px 12px 12px","elements":[{"tag":"markdown","content":"告警西湖，位于中国浙江省杭州市西湖区龙井路1号，杭州市区西部，汇水面积为21.22平方千米，湖面面积为6.38平方千米。","text_align":"left","text_size":"normal_v2","margin":"0px 0px 0px 0px"},{"tag":"button","text":{"tag":"plain_text","content":"🌞更多景点介绍告警"},"type":"default","width":"default","size":"medium","behaviors":[{"type":"open_url","default_url":"https://baike.baidu.com/item/%E8%A5%BF%E6%B9%96/4668821","pc_url":"","ios_url":"","android_url":""}],"margin":"0px 0px 0px 0px"}]},"header":{"title":{"tag":"plain_text","content":"今日旅游推荐告警"},"subtitle":{"tag":"plain_text","content":"告警"},"template":"blue","padding":"12px 12px 12px 12px"}}}
+    format: CARD

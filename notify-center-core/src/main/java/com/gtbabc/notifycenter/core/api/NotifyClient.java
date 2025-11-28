@@ -33,22 +33,22 @@ public interface NotifyClient {
      * 指定模板发送通知
      *
      * @param notifyKey        规则key
-     * @param prefixTemplateId 模版前缀，会根据 prefixTemplateId + "_" + channelType 生成模版ID
+     * @param templateId 模版id, 模版id下有多个类型的模版，如：钉钉，飞书等
      * @param params           参数
      * @return NotifyResult
      */
-    NotifyResult notify(String notifyKey, String prefixTemplateId, Map<String, Object> params);
+    NotifyResult notify(String notifyKey, String templateId, Map<String, Object> params);
 
     /**
      * 指定模板等级发送通知
      *
      * @param notifyKey        规则key
-     * @param prefixTemplateId 模版前缀，会根据 prefixTemplateId + "_" + channelType 生成模版ID
+     * @param templateId 模版id, 模版id下有多个类型的模版，如：钉钉，飞书等
      * @param level            通知级别
      * @param params           参数
      * @return NotifyResult
      */
-    NotifyResult notify(String notifyKey, String prefixTemplateId, NotifyLevel level, Map<String, Object> params);
+    NotifyResult notify(String notifyKey, String templateId, NotifyLevel level, Map<String, Object> params);
 }
 
 

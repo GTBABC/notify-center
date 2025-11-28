@@ -73,16 +73,16 @@ public class DefaultNotifyClient implements NotifyClient {
     }
 
     @Override
-    public NotifyResult notify(String notifyKey, String prefixTemplateId, Map<String, Object> params) {
-        return notify(notifyKey, prefixTemplateId, null, params);
+    public NotifyResult notify(String notifyKey, String templateId, Map<String, Object> params) {
+        return notify(notifyKey, templateId, null, params);
     }
 
     @Override
-    public NotifyResult notify(String notifyKey, String prefixTemplateId, NotifyLevel level, Map<String, Object> params) {
-        return execute(notifyKey, prefixTemplateId, level, params);
+    public NotifyResult notify(String notifyKey, String templateId, NotifyLevel level, Map<String, Object> params) {
+        return execute(notifyKey, templateId, level, params);
     }
 
-    private NotifyResult execute(String notifyKey, String prefixTemplateId, NotifyLevel overrideLevel, Map<String, Object> params) {
+    private NotifyResult execute(String notifyKey, String templateId, NotifyLevel overrideLevel, Map<String, Object> params) {
         NotifyResult result = new NotifyResult();
         result.setNotifyKey(notifyKey);
         result.setChannelResults(new HashMap<>());
@@ -135,8 +135,15 @@ public class DefaultNotifyClient implements NotifyClient {
                 continue;
             }
 
-            String templateId = prefixTemplateId != null && !prefixTemplateId.isEmpty() ? prefixTemplateId + "_" + channelType : null;
-            NotifyTemplate template = templateProvider.getTemplate(templateId);
+            templateId = templateId != null && !templateId.isEmpty() ? templateId : channelRule.getTemplateId();
+            if (templateId == null || templateId.isEmpty()) {
+                log.warn("[NotifyCenter] templateId is empty, notifyKey={}, channel={}", notifyKey, channelType);
+                chResult.setSuccess(false);
+                chResult.setErrorCode("TEMPLATE_ID_EMPTY");
+                chResult.setErrorMessage("templateId is empty");
+                continue;
+            }
+            NotifyTemplate template = templateProvider.getTemplate(templateId + "_" + channelType);
             if (template == null) {
                 template = templateProvider.getTemplate(channelRule.getTemplateId());
             }
